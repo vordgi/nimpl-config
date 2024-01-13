@@ -1,82 +1,44 @@
+import type { Config, ConfigItem } from "./types";
 
-type ConfigItemEl = string | boolean | number | null | undefined;
-
-type ConfigItem = {[key: string]: ConfigItem} | ConfigItem[] | ConfigItemEl;
-
-export type Config = {
-    [key: string]: ConfigItem;
+const isMergeablePart = (part: ConfigItem): part is Record<string, ConfigItem> => {
+    return Boolean(part) && typeof part === 'object' && !Array.isArray(part);
 }
 
-const injectEnvs = (part: ConfigItem): ConfigItem => {
-    if (typeof part === 'string') {
-        return process.env[part];
-    }
+const mergeParts = (basePart: ConfigItem, parts: ConfigItem[], subKey?: string) => {
+    if (isMergeablePart(basePart)) {
+        const newPart: { [key: string]: ConfigItem } = {};
+        Object.entries(basePart).forEach(([key, value]) => {
+            const existedParts = parts.reduce<ConfigItem[]>((acc, cur) => {
+                if (isMergeablePart(cur)) {
+                    if (cur[key] !== undefined) {
+                        acc.push(cur[key]);
+                    }
+                } else {
+                    throw new Error(`Different type for "${subKey}". Should be: object; got: ${Array.isArray(cur) ? 'Array' : typeof cur}`);
+                }
+                return acc;
+            }, []);
+            newPart[key] = mergeParts(value, existedParts, `${subKey ? `${subKey}.` : ''}${key}`);
+        }, [])
 
-    if (Array.isArray(part)) {
-        return part.map(injectEnvs);
-    }
-
-    if (part && typeof part === 'object') {
-        const newPart: ConfigItem = {};
-        Object.entries(part).map(([key, value]) => (
-            newPart[key] = injectEnvs(value)
-        ));
         return newPart;
     }
 
-    throw new Error(`Invalid value in envs config: ${part}`)
-}
+    const lastExistedPart = parts.findLast(part => part !== undefined);
 
-export const injectEnvsToConfig = (config: Config) => {
-    const newConfig: Config = {};
-
-    Object.entries(config).map(([key, value]) => {
-        newConfig[key] = injectEnvs(value);
-    })
-
-    return newConfig;
-}
-
-const isNestedPart = (part: ConfigItem): part is Record<string, ConfigItem> => {
-    return !!part && !Array.isArray(part) && typeof part === 'object';
-}
-
-const formatParts = (key: string, parts: ConfigItem[]) => {
-    return parts.reduce<Exclude<ConfigItem, undefined>[]>((acc, part) => {
-        if (isNestedPart(part)) {
-            if (key in part) {
-                const subpart = part[key as keyof typeof part];
-                if (subpart !== undefined) {
-                    acc.push(subpart);
-                }
-            }
+    if (lastExistedPart) {
+        if (Array.isArray(basePart) && !Array.isArray(lastExistedPart)) {
+            throw new Error(`Different type for "${subKey}". Should be: Array; got: ${typeof lastExistedPart}`);
         }
-        return acc;
-    }, [])
+        if (lastExistedPart !== null && typeof basePart !== typeof lastExistedPart) {
+            throw new Error(`Different type for "${subKey}". Should be: ${typeof basePart}; got: ${typeof lastExistedPart}`);
+        }
+        return lastExistedPart;
+    }
+
+    return lastExistedPart || basePart;
 }
 
 export const mergeConfigs = async (baseConfig: Config, configs: Config[]) => {
-    const mergePart = (basePart: ConfigItem, rewritingParts: Exclude<ConfigItem, undefined>[]): ConfigItem => {
-        if (isNestedPart(basePart)) {
-            const newPart: ConfigItem = {};
-            Object.entries(basePart).map(([key, value]) => (
-                newPart[key] = mergePart(value, formatParts(key, rewritingParts))
-            ));
-            return newPart;
-        }
-
-        const rewritingPart = rewritingParts[rewritingParts.length - 1];
-
-        if (rewritingPart === undefined) return basePart;
-
-        if (rewritingPart === null) return null;
-
-        if (typeof rewritingPart !== typeof basePart || (typeof rewritingPart === 'object' && !Array.isArray(rewritingPart))) {
-            throw new Error('Invalid Scheme');
-        }
-
-        return rewritingPart;
-    }
-    
-    return mergePart(baseConfig, configs)
+    return mergeParts(baseConfig, configs);
 }

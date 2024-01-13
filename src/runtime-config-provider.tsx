@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef } from "react"
-import type { Config } from "./lib/format-config"
+import type { Config } from "./lib/types"
 import { RuntimeConfigContext } from "./lib/runtime-config-context";
 
 const RuntimeConfigProvider: React.FC<{ children: React.ReactNode; apiPath: string }> = ({ children, apiPath }) => {

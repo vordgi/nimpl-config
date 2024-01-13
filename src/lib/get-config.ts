@@ -1,4 +1,5 @@
-import { injectEnvsToConfig, mergeConfigs } from "./format-config";
+import { mergeConfigs } from "./format-config";
+import { injectEnvsToConfig } from "./inject-envs";
 import { findConfigs, getConfigVariantFolder, loadConfig } from "./utils";
 
 const getConfig = async (variant: 'build' | 'postbuild' | 'server' | 'runtime', env?: string) => {
