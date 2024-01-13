@@ -13,6 +13,8 @@ And here are a few downsides:
 
 On the other hand, next-impl-config offers support for 4 different configuration options for your applications.
 
+Another important advantage of next-impl-config is that it supports functions (*synchronous and asynchronous*) and will successfully merge their result.
+
 ## Installation
 
 **Using npm:**

@@ -4,10 +4,11 @@ const isMergeablePart = (part: ConfigItem): part is Record<string, ConfigItem> =
     return Boolean(part) && typeof part === 'object' && !Array.isArray(part);
 }
 
-const mergeParts = (basePart: ConfigItem, parts: ConfigItem[], subKey?: string) => {
+const mergeParts = async (basePart: ConfigItem, parts: ConfigItem[], subKey?: string): Promise<ConfigItem> => {
     if (isMergeablePart(basePart)) {
         const newPart: { [key: string]: ConfigItem } = {};
-        Object.entries(basePart).forEach(([key, value]) => {
+
+        for await (const [key, value] of Object.entries(basePart)) {
             const existedParts = parts.reduce<ConfigItem[]>((acc, cur) => {
                 if (isMergeablePart(cur)) {
                     if (cur[key] !== undefined) {
@@ -18,9 +19,22 @@ const mergeParts = (basePart: ConfigItem, parts: ConfigItem[], subKey?: string) 
                 }
                 return acc;
             }, []);
-            newPart[key] = mergeParts(value, existedParts, `${subKey ? `${subKey}.` : ''}${key}`);
-        }, [])
+            newPart[key] = await mergeParts(value, existedParts, `${subKey ? `${subKey}.` : ''}${key}`);
+        }
 
+        return newPart;
+    }
+
+    if (typeof basePart === 'function') {
+        const basePartResult = await basePart();
+        const partsResult = await Promise.all(parts.map(part => {
+            if (typeof part === 'function') {
+                return part();
+            } else {
+                throw new Error(`Different type for "${subKey}". Should be: function; got: ${typeof part}`);
+            }
+        }))
+        const newPart = await mergeParts(basePartResult, partsResult, subKey);
         return newPart;
     }
 
@@ -40,5 +54,6 @@ const mergeParts = (basePart: ConfigItem, parts: ConfigItem[], subKey?: string) 
 }
 
 export const mergeConfigs = async (baseConfig: Config, configs: Config[]) => {
-    return mergeParts(baseConfig, configs);
+    const result = await mergeParts(baseConfig, configs);
+    return result;
 }

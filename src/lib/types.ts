@@ -1,6 +1,8 @@
 type ConfigItemEl = string | boolean | number | null;
 
-export type ConfigItem = {[key: string]: ConfigItem} | ConfigItem[] | ConfigItemEl;
+type ConfigItemFunc = () => (ConfigItem | Promise<ConfigItem>);
+
+export type ConfigItem = {[key: string]: ConfigItem} | ConfigItem[] | ConfigItemEl | ConfigItemFunc;
 
 export type Config = {
     [key: string]: ConfigItem;
