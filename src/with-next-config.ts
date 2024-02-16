@@ -5,7 +5,7 @@ import path from 'path';
 
 const configDeclarationsPath = path.join(process.cwd(), 'next-impl-config.d.ts');
 const template = `// NOTE: This file should not be edited
-// see https://github.com/vordgi/next-impl-config for more information.
+// see https://github.com/vordgi/next-impl-config#typescript for more information.
 
 declare module "next-impl-config/use-runtime-config" {
     declare const useRuntimeConfig: () => typeof import('./config/runtime/default');

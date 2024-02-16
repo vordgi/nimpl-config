@@ -171,6 +171,12 @@ export default function RootLayout() {
 }
 ```
 
+## Typescript
+
+When the application runs, the package will create a file with type declarations - `next-impl-config.d.ts`.
+
+After this, each config variant will be typed exactly in accordance with the default config.
+
 ## License
 
 [MIT](https://github.com/vordgi/next-impl-config/blob/main/LICENSE)
