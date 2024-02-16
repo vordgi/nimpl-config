@@ -1,6 +1,6 @@
 {
   "name": "next-impl-config",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "The package allows for convenient management of application configuration in Next.js environments.",
   "files": [
     "**/*.js",
