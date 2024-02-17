@@ -42,15 +42,15 @@ All types support the following config variants:
 
 - default.js
 - default.local.js
-- [PROCESS_ENV].js
-- [PROCESS_ENV].local.js
+- [TARGET_ENV].js
+- [TARGET_ENV].local.js
 - envs.js
 - envs.local.js
 
 The lower the config variant is in the list, the higher its priority.
 
 - default.js: Used as the default value, all config keys should be filled in this file.
-- [PROCESS_ENV].js: Environment-dependent config.
+- [TARGET_ENV].js: Environment-dependent config (see [environment-dependent config](#environment-dependent-config)).
 - envs.js: Config with environment variables as values.
 - .local.js versions: Local versions that should be added to gitignore.
 
@@ -135,13 +135,13 @@ module.exports = withNextConfig()(nextConfig);
 
 Possible environments need to be passed to withNextConfig.
 
-```jsx
+```js
 /// next.config.js
 const withNextConfig = require('next-impl-config/with-next-config').default;
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    // ...
+  // ...
 };
 
 module.exports = withNextConfig(['development', 'staging', 'production'])(nextConfig);
@@ -169,6 +169,22 @@ export default function RootLayout() {
     </RuntimeConfigProvider>
   );
 }
+```
+
+## Environment-dependent config
+
+The default Environment-dependent config is the config with the current NODE_ENV. If you want to use a different key, pass it as the second argument in `withNextConfig`
+
+```js
+/// next.config.js
+const withNextConfig = require('next-impl-config/with-next-config').default;
+
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  // ...
+};
+
+module.exports = withNextConfig(['development', 'staging', 'production'], process.env.MY_CUSTOM_ENV)(nextConfig);
 ```
 
 ## Typescript
