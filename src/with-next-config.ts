@@ -21,11 +21,14 @@ declare module "next-impl-config/postbuild-config" {
 }
 
 declare module "next-impl-config/server-config" {
-    export declare const serverConfig: typeof import('./config/server/default');
+    export declare const serverConfig: Promise<typeof import('./config/server/default')>;
 }
 `
 
-const withNextConfig = (envs: string[] = []) => {
+const withNextConfig = (envs: string[] = [], targetEnv?: string) => {
+    if (targetEnv && !envs.includes(targetEnv)) {
+        console.log(`next-impl-config: an unknown env was passed (${targetEnv}), the allowed ones were: [${envs.join(', ')}]`);
+    }
     if (!existsSync(configDeclarationsPath)) {
         console.log(`next-impl-config: next-impl-config.d.ts file with configs types was generated`);
         writeFileSync(configDeclarationsPath, template);
@@ -39,6 +42,9 @@ const withNextConfig = (envs: string[] = []) => {
         const NEXT_CONFIG_POSTBUILD = await getPostbuildConfig(envs);
         nextConfig.env.NEXT_CONFIG_BUILD = JSON.stringify(NEXT_CONFIG_BUILD);
         nextConfig.env.NEXT_CONFIG_POSTBUILD = JSON.stringify(NEXT_CONFIG_POSTBUILD);
+        if (targetEnv) {
+            nextConfig.env.NEXT_IMPL_CONFIG_ENV = targetEnv;
+        }
         return nextConfig;
     }
 }

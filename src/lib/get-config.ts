@@ -4,7 +4,7 @@ import { findConfigs, getConfigVariantFolder, loadConfig } from "./utils";
 
 const getConfig = async (variant: 'build' | 'postbuild' | 'server' | 'runtime', env?: string) => {
     const variantFolder = getConfigVariantFolder(variant);
-    const configs = await findConfigs(variantFolder, env || process.env.NODE_ENV);
+    const configs = await findConfigs(variantFolder, env || process.env.NEXT_IMPL_CONFIG_ENV || process.env.NODE_ENV);
 
     if (!configs) return null;
 
