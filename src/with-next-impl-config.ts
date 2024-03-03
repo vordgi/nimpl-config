@@ -1,47 +1,31 @@
+import configurePackageTypes from "./lib/configure-package-types";
 import getBuildConfig from "./lib/get-build-config";
 import getPostbuildConfig from "./lib/get-postbuild-config";
-import { existsSync, writeFileSync } from 'fs';
-import path from 'path';
 
-const configDeclarationsPath = path.join(process.cwd(), 'next-impl-config.d.ts');
-const template = `// NOTE: This file should not be edited
-// see https://github.com/vordgi/next-impl-config#typescript for more information.
-
-declare module "next-impl-config/use-runtime-config" {
-    declare const useRuntimeConfig: () => typeof import('./config/runtime/default');
-    export default useRuntimeConfig;
+type NextImplConfigParam = {
+    envs?: string[];
+    targetEnv?: string;
+    folder?: string;
 }
 
-declare module "next-impl-config/build-config" {
-    export declare const buildConfig: typeof import('./config/build/default');
-}
-
-declare module "next-impl-config/postbuild-config" {
-    export declare const postbuildConfig: typeof import('./config/postbuild/default');
-}
-
-declare module "next-impl-config/server-config" {
-    export declare const serverConfig: Promise<typeof import('./config/server/default')>;
-}
-`
-
-const withNextConfig = (envs: string[] = [], targetEnv?: string) => {
+const nextImplConfig = ({ envs = [], targetEnv, folder }: NextImplConfigParam) => {
     if (targetEnv && !envs.includes(targetEnv)) {
         console.log(`next-impl-config: an unknown env was passed (${targetEnv}), the allowed ones were: [${envs.join(', ')}]`);
     }
-    if (!existsSync(configDeclarationsPath)) {
-        console.log(`next-impl-config: next-impl-config.d.ts file with configs types was generated`);
-        writeFileSync(configDeclarationsPath, template);
-    }
+
+    configurePackageTypes(folder || 'config');
 
     return async (nextConfig: any) => {
         if (!nextConfig) nextConfig = {};
         if (!nextConfig.env) nextConfig.env = {};
 
-        const NEXT_CONFIG_BUILD = await getBuildConfig();
-        const NEXT_CONFIG_POSTBUILD = await getPostbuildConfig(envs);
+        const NEXT_CONFIG_BUILD = await getBuildConfig(folder);
+        const NEXT_CONFIG_POSTBUILD = await getPostbuildConfig(envs, folder);
         nextConfig.env.NEXT_CONFIG_BUILD = JSON.stringify(NEXT_CONFIG_BUILD);
         nextConfig.env.NEXT_CONFIG_POSTBUILD = JSON.stringify(NEXT_CONFIG_POSTBUILD);
+        if (folder) {
+            nextConfig.env.NEXT_IMPL_CONFIG_FOLDER = folder;
+        }
         if (targetEnv) {
             nextConfig.env.NEXT_IMPL_CONFIG_ENV = targetEnv;
         }
@@ -49,4 +33,4 @@ const withNextConfig = (envs: string[] = [], targetEnv?: string) => {
     }
 }
 
-export default withNextConfig;
+export default nextImplConfig;

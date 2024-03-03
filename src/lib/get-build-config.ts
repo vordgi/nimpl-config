@@ -1,7 +1,7 @@
 import getConfig from "./get-config";
 
-const getBuildConfig = async () => {
-    const config = await getConfig('build');
+const getBuildConfig = async (configFolder?: string) => {
+    const config = await getConfig({ variant: 'build', configFolder });
     return config;
 }
 

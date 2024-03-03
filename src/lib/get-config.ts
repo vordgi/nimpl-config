@@ -2,8 +2,14 @@ import { mergeConfigs } from "./format-config";
 import { injectEnvsToConfig } from "./inject-envs";
 import { findConfigs, getConfigVariantFolder, loadConfig } from "./utils";
 
-const getConfig = async (variant: 'build' | 'postbuild' | 'server' | 'runtime', env?: string) => {
-    const variantFolder = getConfigVariantFolder(variant);
+type GetConfigParam = {
+    variant: 'build' | 'postbuild' | 'server' | 'runtime';
+    env?: string;
+    configFolder?: string;
+}
+
+const getConfig = async ({ variant, env, configFolder }: GetConfigParam) => {
+    const variantFolder = getConfigVariantFolder(variant, configFolder);
     const configs = await findConfigs(variantFolder, env || process.env.NEXT_IMPL_CONFIG_ENV || process.env.NODE_ENV);
 
     if (!configs) return null;
