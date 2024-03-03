@@ -2,8 +2,8 @@ import path from "path"
 import { pathToFileURL } from "url";
 import { readdir } from 'fs/promises';
 
-export const getConfigVariantFolder = (variant: string) => {
-    return path.join(process.cwd(), 'config', variant);
+export const getConfigVariantFolder = (variant: string, configFolder: string = 'config') => {
+    return path.join(process.cwd(), configFolder, variant);
 }
 
 export const findConfigs = async (variantFolder: string, env?: string) => {

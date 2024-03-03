@@ -117,34 +117,34 @@ This type doesn't require any additional configuration.
 
 ### build
 
-Next.js config needs to be wrapped with withNextConfig.
+Next.js config needs to be wrapped with nextImplConfig.
 
 ```jsx
 /// next.config.js
-const withNextConfig = require('next-impl-config/with-next-config').default;
+const nextImplConfig = require('next-impl-config/with-next-impl-config').default;
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     // ...
 };
 
-module.exports = withNextConfig()(nextConfig);
+module.exports = nextImplConfig()(nextConfig);
 ```
 
 ### postbuild
 
-Possible environments need to be passed to withNextConfig.
+Possible environments need to be passed to nextImplConfig.
 
 ```js
 /// next.config.js
-const withNextConfig = require('next-impl-config/with-next-config').default;
+const nextImplConfig = require('next-impl-config/with-next-impl-config').default;
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // ...
 };
 
-module.exports = withNextConfig(['development', 'staging', 'production'])(nextConfig);
+module.exports = nextImplConfig({ envs: ['development', 'staging', 'production'] })(nextConfig);
 ```
 
 ### runtime
@@ -173,18 +173,32 @@ export default function RootLayout() {
 
 ## Environment-dependent config
 
-The default Environment-dependent config is the config with the current NODE_ENV. If you want to use a different key, pass it as the second argument in `withNextConfig`
+The default Environment-dependent config is the config with the current NODE_ENV. If you want to use a different key, pass it to `nextImplConfig`
 
 ```js
 /// next.config.js
-const withNextConfig = require('next-impl-config/with-next-config').default;
+const nextImplConfig = require('next-impl-config/with-next-impl-config').default;
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // ...
 };
 
-module.exports = withNextConfig(['development', 'staging', 'production'], process.env.MY_CUSTOM_ENV)(nextConfig);
+module.exports = nextImplConfig({ envs: ['development', 'staging', 'production'], targetEnv: process.env.MY_CUSTOM_ENV })(nextConfig);
+```
+
+## Custom config folder
+
+```js
+/// next.config.js
+const nextImplConfig = require('next-impl-config/with-next-impl-config').default;
+
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  // ...
+};
+
+module.exports = nextImplConfig({ folder: 'custom-config-folder' })(nextConfig);
 ```
 
 ## Typescript

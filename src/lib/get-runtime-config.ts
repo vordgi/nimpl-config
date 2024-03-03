@@ -1,7 +1,7 @@
 import getConfig from "./get-config";
 
-const getRuntimeConfig = async () => {
-    const config = await getConfig('runtime');
+const getRuntimeConfig = async (configFolder?: string) => {
+    const config = await getConfig({ variant: 'runtime', configFolder });
     return config;
 }
 
