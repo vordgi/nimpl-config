@@ -1,9 +1,9 @@
-import RuntimeConfigProvider from 'next-impl-config/runtime-config-provider';
+import RuntimeConfigProvider from '@nimpl/config/runtime-config-provider';
 
 export const metadata = {
-  title: 'Next-impl-config Example',
-  description: 'Example for next-impl-config package',
-  metadataBase: new URL('https://next-impl-config-example.vercel.app'),
+  title: '@nimpl/config Example',
+  description: 'Example for @nimpl/config package',
+  metadataBase: new URL('https://nimpl-config-example.vercel.app'),
 };
 
 export default function RootLayout(props: {

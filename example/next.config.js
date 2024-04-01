@@ -1,4 +1,4 @@
-const nextImplConfig = require('next-impl-config/with-next-impl-config').default;
+const { default: nextImplConfig } = require('@nimpl/config/with-next-impl-config');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
