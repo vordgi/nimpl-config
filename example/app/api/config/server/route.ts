@@ -1,4 +1,4 @@
-import { serverConfig } from 'next-impl-config/server-config';
+import { serverConfig } from '@nimpl/config/server-config';
 
 export async function GET() {
     const config = await serverConfig;

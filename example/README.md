@@ -1,1 +1,1 @@
-# Example for next-impl-config
+# Example for nimpl-config

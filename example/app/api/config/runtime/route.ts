@@ -1,1 +1,1 @@
-export { runtimeConfigApi as GET } from 'next-impl-config/runtime-config-api';
+export { runtimeConfigApi as GET } from '@nimpl/config/runtime-config-api';

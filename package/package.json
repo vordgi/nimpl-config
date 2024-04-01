@@ -1,7 +1,7 @@
 {
-  "name": "next-impl-config",
-  "version": "0.5.1",
-  "description": "The package allows for convenient management of application configuration in Next.js environments.",
+  "name": "@nimpl/config",
+  "version": "0.6.0",
+  "description": "The package allows for convenient management of application configuration in Next.js environments",
   "files": [
     "**/*.js",
     "**/*.d.ts"
@@ -23,7 +23,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/vordgi/next-impl-config.git"
+    "url": "git://github.com/vordgi/nimpl-config.git"
   },
   "author": {
     "name": "Savelyev Alexander",

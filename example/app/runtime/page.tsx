@@ -1,6 +1,6 @@
 'use client';
 
-import useRuntimeConfig from 'next-impl-config/use-runtime-config';
+import useRuntimeConfig from '@nimpl/config/use-runtime-config';
 
 export default function Page() {
   const config = useRuntimeConfig();
