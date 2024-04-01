@@ -1,4 +1,4 @@
-# next-impl-config
+# @nimpl/config
 
 The package adding support for configuration for each possible next.js environment (*build, server, client, and edge*)
 
