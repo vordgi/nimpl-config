@@ -15,6 +15,7 @@ out/
 # production
 build
 !config/build
+!app/build
 *.tgz
 
 # misc
