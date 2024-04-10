@@ -19,11 +19,10 @@ jobs:
 
       - name: Install dependencies and build
         run: |
-          npm ci
-          npm run build
-          cp ../README.md .
-          cp ../LICENSE .
-        working-directory: ./package
+          pnpm install
+          pnpm package run build
+          cp README.md ./package
+          cp LICENSE ./package
 
       - name: Publish on main
         if: "!contains(github.ref_name, 'canary')"
