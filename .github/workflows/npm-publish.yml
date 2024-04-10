@@ -25,7 +25,7 @@ jobs:
       - name: Install deps and Build package
         run: |
           pnpm install
-          pnpm package run build
+          pnpm nimpl:config run build
           cp README.md ./package
           cp LICENSE ./package
 
