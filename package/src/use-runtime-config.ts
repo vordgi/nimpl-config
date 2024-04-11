@@ -6,6 +6,6 @@ const useRuntimeConfig = (): Config | null => {
     const configData = useContext(RuntimeConfigContext);
 
     return configData;
-}
+};
 
 export default useRuntimeConfig;

@@ -3,10 +3,10 @@ import { injectEnvsToConfig } from "./inject-envs";
 import { findConfigs, getConfigVariantFolder, loadConfig } from "./utils";
 
 type GetConfigParam = {
-    variant: 'build' | 'postbuild' | 'server' | 'runtime';
+    variant: "build" | "postbuild" | "server" | "runtime";
     env?: string;
     configFolder?: string;
-}
+};
 
 const getConfig = async ({ variant, env, configFolder }: GetConfigParam) => {
     const variantFolder = getConfigVariantFolder(variant, configFolder);
@@ -25,6 +25,6 @@ const getConfig = async ({ variant, env, configFolder }: GetConfigParam) => {
 
     const config = await mergeConfigs(defaultConfig, otherConfigs.filter(Boolean));
     return config;
-}
+};
 
 export default getConfig;

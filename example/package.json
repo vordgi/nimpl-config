@@ -1,10 +1,9 @@
 {
   "name": "nimpl-config-example",
   "scripts": {
-    "dev": "next dev --turbo",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "use-local-package": "cd ../package && npm install && npm run build && cd ../example && npm install ../package",
     "test": "ts-node test"
   },
   "dependencies": {

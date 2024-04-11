@@ -6,15 +6,18 @@ type NimplConfigParam = {
     envs?: string[];
     targetEnv?: string;
     folder?: string;
-}
+};
 
 const nimplConfig = ({ envs = [], targetEnv, folder }: NimplConfigParam) => {
     if (targetEnv && !envs.includes(targetEnv)) {
-        console.log(`@nimpl/config: an unknown env was passed (${targetEnv}), the allowed ones were: [${envs.join(', ')}]`);
+        console.log(
+            `@nimpl/config: an unknown env was passed (${targetEnv}), the allowed ones were: [${envs.join(", ")}]`,
+        );
     }
 
-    configurePackageTypes(folder || 'config');
+    configurePackageTypes(folder || "config");
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return async (nextConfig: any) => {
         if (!nextConfig) nextConfig = {};
         if (!nextConfig.env) nextConfig.env = {};
@@ -30,7 +33,7 @@ const nimplConfig = ({ envs = [], targetEnv, folder }: NimplConfigParam) => {
             nextConfig.env.NIMPL_CONFIG_ENV = targetEnv;
         }
         return nextConfig;
-    }
-}
+    };
+};
 
 export default nimplConfig;
