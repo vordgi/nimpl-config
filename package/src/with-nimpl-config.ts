@@ -19,10 +19,13 @@ const nimplConfig = ({ envs = [], targetEnv, targetEnvKey, folder }: NimplConfig
             `@nimpl/config: an unknown env was passed (${targetEnv}), the allowed ones were: [${envs.join(", ")}]`,
         );
     }
-    if (targetEnvKey && (!process.env[targetEnvKey] || !envs.includes(process.env[targetEnvKey]))) {
-        console.log(
-            `@nimpl/config: Failed to get the allowed env by the targetEnvKey (process.env["${targetEnvKey}"]=${process.env[targetEnvKey]}), the allowed ones were: [${envs.join(", ")}]`,
-        );
+    if (targetEnvKey) {
+        const targetEnvByKey = process.env[targetEnvKey];
+        if (!targetEnvByKey || !envs.includes(targetEnvByKey)) {
+            console.log(
+                `@nimpl/config: Failed to get the allowed env by the targetEnvKey (process.env["${targetEnvKey}"]=${process.env[targetEnvKey]}), the allowed ones were: [${envs.join(", ")}]`,
+            );
+        }
     }
 
     configurePackageTypes(folder || "config");
