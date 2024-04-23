@@ -10,7 +10,11 @@ type GetConfigParam = {
 
 const getConfig = async ({ variant, env, configFolder }: GetConfigParam) => {
     const variantFolder = getConfigVariantFolder(variant, configFolder);
-    const configs = await findConfigs(variantFolder, env || process.env.NIMPL_CONFIG_ENV || process.env.NODE_ENV);
+    const configEnvKey = process.env.NIMPL_CONFIG_ENV_KEY;
+    const configs = await findConfigs(
+        variantFolder,
+        env || (configEnvKey && process.env[configEnvKey]) || process.env.NIMPL_CONFIG_ENV || process.env.NODE_ENV,
+    );
 
     if (!configs) return null;
 
