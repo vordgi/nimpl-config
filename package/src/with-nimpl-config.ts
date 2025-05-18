@@ -5,9 +5,9 @@ import getPostbuildConfig from "./lib/get-postbuild-config";
 type NimplConfigParam = {
     /** List of possible environment variables */
     envs?: string[];
-    /** The current environment variable that will be used for [Environment-dependent config](https://nimpl.tech/config/configuration#environment-dependent-config) */
+    /** The current environment variable that will be used for [Environment-dependent config](https://nimpl.dev/docs/config#environment-dependent-config) */
     targetEnv?: string;
-    /** The key of the environment variable that needs to be used for [Environment-dependent config](https://nimpl.tech/config/configuration#environment-dependent-config) */
+    /** The key of the environment variable that needs to be used for [Environment-dependent config](https://nimpl.dev/docs/config#environment-dependent-config) */
     targetEnvKey?: string;
     /** Path to the directory with configs */
     folder?: string;
