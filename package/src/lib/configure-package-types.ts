@@ -17,7 +17,7 @@ const configurePackageTypes = (folder: string) => {
         writeFileSync(
             configDeclarationsPath,
             `// NOTE: This file should not be edited
-// see https://nimpl.tech/config/configuration#typescript for more information.
+// see https://nimpl.dev/docs/config#typescript for more information.
 
 declare module "@nimpl/config/use-runtime-config" {
     declare const useRuntimeConfig: () => typeof import('${normalizedRelativePath}/runtime/default');

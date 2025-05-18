@@ -2,7 +2,7 @@
 
 The package adding support for configuration for each possible next.js environment (*build, server, client, and edge*)
 
-Visit https://nimpl.tech/config to view the full documentation.
+Visit https://nimpl.dev/docs/config to view the full documentation.
 
 ## Installation
 
